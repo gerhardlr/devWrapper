@@ -1,0 +1,77 @@
+# 
+# Docker compose file for TANGO database, database device server and tango test ds
+# the containers are based on images on gerhardlr docker repository (to be moved later)
+# the composition connects to an externally defined network: docker network create $DOCKER_NETWORK
+# check that you have the same external network attched to your home grown containers if you want to use these services
+# 
+#
+version: '3'
+volumes:
+  tangodb: {}
+        
+services:
+  tangodb:
+    image: gerhardlr/tangodb:latest
+    container_name: tangodb    
+    hostname: tangodb  
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=tango
+      - MYSQL_USER=tango
+      - MYSQL_PASSWORD=tango
+    volumes:
+      - tangodb:/var/lib/mysql
+    networks:
+      - default
+
+  databaseds:
+    image: gerhardlr/tango_base:latest
+    container_name: databaseds
+    hostname: databaseds
+    depends_on:
+      - tangodb
+    environment:
+      - MYSQL_HOST=tangodb:3306 
+      - MYSQL_DATABASE=tango
+      - MYSQL_USER=tango
+      - MYSQL_PASSWORD=tango
+      - TANGO_HOST=databaseds:10000 
+    entrypoint:
+      - /usr/local/bin/wait-for-it.sh
+      - tangodb:3306
+      - --timeout=30
+      - --strict
+      - --
+      - /usr/local/bin/DataBaseds
+      - "2"
+      - -ORBendPoint
+      - giop:tcp::10000
+    networks:
+      - default
+      
+  tangotestds:
+    image: gerhardlr/tango_base:latest
+    container_name: tangotestds
+    hostname: tangotestds
+    depends_on:
+      - databaseds
+    environment:
+      - MYSQL_HOST=tangodb:3306 
+      - MYSQL_DATABASE=tango
+      - MYSQL_USER=tango
+      - MYSQL_PASSWORD=tango
+      - TANGO_HOST=databaseds:10000 
+    entrypoint:
+      - /usr/local/bin/wait-for-it.sh
+      - databaseds:10000
+      - --timeout=30
+      - --strict
+      - --
+      - /usr/local/bin/TangoTest
+      - "test"
+    networks:
+      - default
+networks:
+  default:
+    external:
+      name: $DOCKER_NETWORK
