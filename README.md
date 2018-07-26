@@ -1,7 +1,7 @@
 # devWrapper
 to start up tango environment
-sh setup.sh
-to run development container
+<p> sh setup.sh </p>
+<p> to run development container </p>
 sh runDev.sh
 in dev shell type:
 devcontainer>> flask run --host=0.0.0.0
