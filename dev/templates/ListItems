@@ -1,0 +1,7 @@
+function ListItems(props){
+    const list = props.list;
+    const listItems = list.map((item, index) =>
+        <li key ={index}>{item.text+" "+item.time.toLocaleTimeString()}</li>
+     );
+    return (<ol>{listItems}</ol>);
+}

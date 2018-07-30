@@ -5,11 +5,12 @@
 <p> sh runDev.sh </p>
 <h3> then... </h3>
 <p></p><p> in dev shell type:<br>
-flask run --host=0.0.0.0 <br>
+ <br>
 
 to test client open browser at: <br>
 http://localhost:5003/ <br>
 
 to stimulate changes to tango test device use tango GUI at: <br>
 http://localhost:6901/?password=vncpassword <br>
+to change dev container (Dockerfile) and run: docker build -t flaskio .
 
