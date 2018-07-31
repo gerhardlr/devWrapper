@@ -33,8 +33,8 @@ def callback(event):
     global events
     events.put(event)
 
-#tango_test = DeviceProxy("sys/tg_test/1")
-#event_id = tango_test.subscribe_event("Status", EventType.CHANGE_EVENT, callback, [], True)
+tango_test = DeviceProxy("sys/tg_test/1")
+event_id = tango_test.subscribe_event("Status", EventType.CHANGE_EVENT, callback, [], True)
 
 
 def background_thread():
@@ -89,6 +89,15 @@ def disconnect_request():
 def ping_pong():
     print("pong emmitted")
     emit('pong to client')
+
+@socketio.on('ping to device', namespace='/test')
+def dev_ping_pong():
+    print('server asked to ping from device')
+    p = DeviceProxy("sys/tg_test/1")
+    elapsed_time = p.ping()
+    emit("pong from device", {'elapsed': elapsed_time})
+    print('client ponged from device')
+
 
 
 @socketio.on('connect', namespace='/test')
