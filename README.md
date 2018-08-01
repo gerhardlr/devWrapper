@@ -4,8 +4,6 @@
 <h3> to run server container </h3>
 <p> sh runDev.sh </p>
 <h3> then... </h3>
-<p></p><p> in dev shell type:<br>
- <br>
 <p> to start client: open up a new shell </p>
 <p> type in: docker exec -it flaskio bash </p>
 <p> type in: cd /client/ </p>
