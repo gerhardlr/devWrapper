@@ -3,10 +3,11 @@ import {LogItem} from '../utilities/utilities';
 
 class CustomCommand extends Component {
   //throws handleLog(log)
-  //takes propos.socket
+  //takes props.socket
+  //takes props.deviceDataService
   constructor(props) {
     super(props);
-    this.state = {command: ''};
+    this.state = {command: '', response : ''};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,7 +21,8 @@ class CustomCommand extends Component {
     event.preventDefault();
     this.props.handleLog(new LogItem('custom command send '+this.state.command) );
     this.setState({command: ''});
-
+    //fetch('http://localhost:5003/REST/test', {mode :'cors'}).then(response => console.log(response.text()));
+    this.props.deviceDataService.command_list_query().then(response => console.log(response));
   }
 
   render() {
