@@ -1,5 +1,11 @@
 body {
-  margin: 0;
-  padding: 0;
+  margin: 8;
+  padding: 8;
   font-family: sans-serif;
+}
+ div.console2 {
+ 	border-style: solid;
+    border-width: thin;
+    border-color: gray;
+    
 }

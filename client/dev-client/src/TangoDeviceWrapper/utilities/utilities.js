@@ -6,3 +6,7 @@ export class LogItem {
   }
 }
 
+export function makeMessage(message,source){
+	return {text : message, time : (new Date()).toLocaleTimeString(), Source : source}
+}
+

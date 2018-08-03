@@ -5,12 +5,15 @@ from flask import Flask, render_template, session, request,jsonify, Response
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
-from PyTango import DeviceProxy,GreenMode
+from PyTango import DeviceProxy,GreenMode, DevState, DevFailed,CommunicationFailed,ConnectionFailed,CmdArgType
 from PyTango import EventType
 from datetime import datetime
 import Queue
 import re
 import ast
+import numpy
+import sys
+
 import traceback
 from PyTango import set_green_mode, get_green_mode
 from flask import g
@@ -38,8 +41,8 @@ def callback(event):
     global events
     events.put(event)
 
-tango_test = DeviceProxy("sys/tg_test/1")
-event_id = tango_test.subscribe_event("Status", EventType.CHANGE_EVENT, callback, [], True)
+#tango_test = DeviceProxy("sys/tg_test/1")
+#event_id = tango_test.subscribe_event("Status", EventType.CHANGE_EVENT, callback, [], True)
 
 def background_thread():
     """Example of how to send server generated events to clients."""
@@ -94,15 +97,74 @@ def test_disconnect():
     print('Client disconnected', request.sid)
 
 ####REST API section
+def handleException(e):
+    response = {}
+    if isinstance(e,DevFailed):
+        response['exception'] = 'DevFailed'
+    elif isinstance(e,CommunicationFailed):
+        response['exception'] = 'CommunicationFailed'
+    elif isinstance(e,ConnectionFailed):
+        response['exception'] = 'ConnectionFailed'
+    errors = [];
+    for error in e:
+        errors.append({'reason':error.reason,'severity':error.severity.name,'desc':error.desc,'origin':error.origin})
+    response['errors'] = errors
+    if app.testing:
+        print("exception caught")
+        print(response)
+    return response
 
-@app.route('/command_inout/<command>',methods=['POST'])
+def encodeArg(command,arg,p):
+    #TODO
+
+    commandInfo = p.command_query(command)
+    inputType = commandInfo.in_type
+    Mapp = {
+        CmdArgType.DevBoolean : 'bool',
+        CmdArgType.DEV_SHORT: 'int',
+        CmdArgType.DEV_LONG: 'int',
+        CmdArgType.DEV_LONG64: 'int',
+        CmdArgType.DEV_FLOAT: 'float',
+        CmdArgType.DEV_DOUBLE: 'float',
+        CmdArgType.DEV_USHORT: 'int',
+        CmdArgType.DEV_ULONG: 'int',
+        CmdArgType.DEV_ULONG64: 'int',
+        CmdArgType.DEV_STRING: 'float',
+        CmdArgType.DevVarCharArray: 'intArray',
+        CmdArgType.DevVarDoubleArray: 'floatArray',
+        CmdArgType.DevVarDoubleStringArray: 'float_StringArray',
+        CmdArgType.DevVarLongStringArray: 'int_StringArray',
+        CmdArgType.DevVarShortArray: 'intArray',
+        CmdArgType.DevVarStringArray: 'StringArray',
+        CmdArgType.DevVarULong64Array: 'intArray',
+        CmdArgType.DevVarULongArray: 'intArray',
+        CmdArgType.DevVarFloatArray: 'intArray',
+        CmdArgType.DevVarUShortArray: 'intArray',
+    }
+
+
+
+@app.route('/REST/command_inout/<command>',methods=['POST'])
 def command_inout(command):
     print("in command_inout")
-    p = DeviceProxy("sys/tg_test/1")
-    args = request.get_json()
-    #result = p.command_inout(command)
-    print(args)
-    return jsonify(args)
+    arg = request.get_json()
+    print(arg)
+    try:
+        p = DeviceProxy("sys/tg_test/1")
+        encodedArg = arg #encodeArg(command,arg,p)
+        if (encodedArg == 'null'):
+            result = p.command_inout(command)
+        else:
+            result = p.command_inout(command, encodedArg)
+        if isinstance(result, numpy.ndarray):
+            result = result.tolist()
+        elif isinstance(result,list):
+            result = re.sub(r"([\d.]+)",r"'\1'",result.__str__())
+        if app.testing:
+            print(json.dumps(result))
+        return jsonify(json.dumps(result))
+    except (CommunicationFailed,ConnectionFailed,DevFailed) as e:
+        return jsonify(handleException(e))
 
 @app.route('/REST/test/',methods=['POST','PUT','GET'])
 def testRest():
@@ -119,13 +181,24 @@ def testRest():
 
 def parseAttribute(attribute):
     x1 = attribute.__str__()
-    x2 = re.sub(r"\n", r",", x1)
-    x3 = re.sub("'", "", x2)
-    x4 = re.sub(r"DeviceAttribute\[,([\w.\-/\s=,'\(\)]+)],", r"{\1}", x3)
-    x5 = re.sub(r"\w+\(([\w\s=,]+)\)", r"{\1}", x4)
-    x6 = re.sub(r"([\w.\-/]+)", r"'\1'", x5)
-    x7 = re.sub("=", ":", x6)
-    return ast.literal_eval(x7)
+    x2 = re.sub(r"\n", r";", x1)
+    x3 = re.sub(r"[^_]value.*(w_dim_x)", r"\1", x2)#remove value object
+    x4 = re.sub("'", "", x3)
+    x5 = re.sub(r"DeviceAttribute\[;(.+)\];$", r"{\1}", x4)
+    x6 = re.sub(r"\w+\(([\w\s=,]+)\)", r"{\1}", x5)
+    x7 = re.sub(r";\s+w_value.*(})", r"\1", x6)
+    x8 = re.sub(r"([\w.\-/]+)", r"'\1'", x7)
+    x9 = re.sub(";", ",", x8)
+    x10 = re.sub("=", ":", x9)
+    x11 = ast.literal_eval(x10)
+    val = attribute.value
+    value = "";
+    if isinstance(val,numpy.ndarray):
+        value = val.tolist()
+    else:
+        value = val
+    x11['value'] = value
+    return x11
 
 def parseCommandInfoList(data):
     x1 = data.__str__()
@@ -141,39 +214,52 @@ def parseStdStringVector(data):
 
 @app.route('/REST/read_attribute/<attribute>')
 def read_attribute(attribute):
-    print("in read_attribute")
-    p = DeviceProxy("sys/tg_test/1")
-    attribute = p.read_attribute(attribute)
-    parsedAttribute = parseAttribute(attribute)
-    return jsonify(parsedAttribute)
+    if app.testing:
+        print("in read_attribute")
+    try:
+        p = DeviceProxy("sys/tg_test/1")
+        redAttribute = p.read_attribute(attribute)
+        response = parseAttribute(redAttribute)
+        return jsonify(response)
+    except (CommunicationFailed,ConnectionFailed,DevFailed) as e:
+        return jsonify(handleException(e))
 
 @app.route('/REST/get_property_list/')
 def get_property_list():
     print("in get_property_list")
-    p = DeviceProxy("sys/tg_test/1")
-    properties = p.get_attribute_list()
-    parsedProperties = parseStdStringVector(properties)
-    return jsonify(parsedProperties)
+    try:
+        p = DeviceProxy("sys/tg_test/1")
+        properties = p.get_attribute_list()
+        parsedProperties = parseStdStringVector(properties)
+        return jsonify(parsedProperties)
+    except (CommunicationFailed, ConnectionFailed, DevFailed) as e:
+        return jsonify(handleException(e))
 
 @app.route('/REST/get_attribute_list/')
 def get_attribute_list():
     print("in get_attribute_list")
-    p = DeviceProxy("sys/tg_test/1")
-    attributes = p.get_attribute_list()
-    parsedAttributes = parseStdStringVector(attributes)
-    return jsonify(parsedAttributes)
+    try:
+        p = DeviceProxy("sys/tg_test/1")
+        attributes = p.get_attribute_list()
+        parsedAttributes = parseStdStringVector(attributes)
+        return jsonify(parsedAttributes)
+    except (CommunicationFailed,ConnectionFailed,DevFailed) as e:
+        return jsonify(handleException(e))
 
 @app.route('/REST/command_list_query/')
 def command_list_query():
     print("in command_list_query")
-    p = DeviceProxy("sys/tg_test/1")
-    commands = p.command_list_query()
-    parsedCommands = parseCommandInfoList(commands)
-    return jsonify(parsedCommands)
+    try:
+        p = DeviceProxy("sys/tg_test/1")
+        commands = p.command_list_query()
+        parsedCommands = parseCommandInfoList(commands)
+        return jsonify(parsedCommands)
+    except (CommunicationFailed,ConnectionFailed,DevFailed) as e:
+        return jsonify(handleException(e))
 
 @app.route('/')
 def index():
-    pass
+    return ""
  #   return render_template('index.html', async_mode=socketio.async_mode)
 
 

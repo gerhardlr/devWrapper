@@ -46,7 +46,7 @@ export default class DeviceDataservice {
 
 	Get(endpoint = "test/", parameters = ""){
 	//e.g. for read attributes
-		let args = parameters == "" ? "" : this.encodeParameters(parameters);
+		let args = (parameters === "") ? "" : this.encodeParameters(parameters);
 		const url = this.urlbase+endpoint+args;
 		let payload = this.createGetPayload();
 		return fetch(url, payload)
@@ -91,7 +91,7 @@ export default class DeviceDataservice {
 	}
 	///posts
 	command_inout(command,args){
-		return this.Post("/command_inout/"+command,args)
+		return this.Post("command_inout/"+command,args)
 	}
 
 }
