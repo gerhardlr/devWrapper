@@ -7,6 +7,7 @@ import ListItems from './ListItems/ListItems';
 import Clock from './Clock/Clock'
 import DeviceDataservice from './DeviceDataservice/DeviceDataservice';
 import GenericCommands from './GenericCommands/GenericCommands';
+import GenericGetAttributes from './GenericGetAttributes/GenericGetAttributes';
 
 
 import {LogItem} from './utilities/utilities';
@@ -51,6 +52,7 @@ class TangoDeviceWrapper extends Component {
         <Clock />
         <CommsHealthChecker handleLog ={this.handleLog} socket = {this.socket}/>
         <GenericCommands handleLog={this.handleLog} deviceDataService={this.deviceDataService} />
+        <GenericGetAttributes handleLog={this.handleLog} deviceDataService={this.deviceDataService}/>
         <ListItems list = {this.state.log} />
         </div>
       );

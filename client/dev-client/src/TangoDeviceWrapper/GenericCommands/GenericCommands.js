@@ -7,6 +7,7 @@ import '../Console/Console.css'
 class GenericCommands extends Component {
 
 	constructor(props) {
+		//takes props.deviceDataService
     	super(props);
     	this.state = {
     		commands : new Array(0),

@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36527e3f-8c20-44e9-8811-c9e0525f381b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dev/testAtt.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/dev-client/src/App.css" afterPath="$PROJECT_DIR$/client/dev-client/src/App.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/dev-client/src/App.js" afterPath="$PROJECT_DIR$/client/dev-client/src/App.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/dev-client/src/TangoDeviceWrapper/CustomCommand/CustomCommand.js" afterPath="$PROJECT_DIR$/client/dev-client/src/TangoDeviceWrapper/CustomCommand/CustomCommand.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/dev-client/src/TangoDeviceWrapper/DeviceDataservice/DeviceDataservice.js" afterPath="$PROJECT_DIR$/client/dev-client/src/TangoDeviceWrapper/DeviceDataservice/DeviceDataservice.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/dev-client/src/TangoDeviceWrapper/GenericCommands/GenericCommands.js" afterPath="$PROJECT_DIR$/client/dev-client/src/TangoDeviceWrapper/GenericCommands/GenericCommands.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/dev-client/src/TangoDeviceWrapper/TangoDeviceWrapper.js" afterPath="$PROJECT_DIR$/client/dev-client/src/TangoDeviceWrapper/TangoDeviceWrapper.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/dev-client/src/TangoDeviceWrapper/utilities/utilities.js" afterPath="$PROJECT_DIR$/client/dev-client/src/TangoDeviceWrapper/utilities/utilities.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/dev-client/src/index.css" afterPath="$PROJECT_DIR$/client/dev-client/src/index.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/deviceWrapper.py" afterPath="$PROJECT_DIR$/dev/deviceWrapper.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
