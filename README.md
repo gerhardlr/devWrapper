@@ -6,7 +6,7 @@
 <h3> then... </h3>
 <p> to start client: open up a new shell </p>
 <p> type in: docker exec -it flaskio bash </p>
-<p> type in: cd /client/ </p>
+<p> type in: cd /client/dev-client/ </p>
 <p> type in: npm start </p>
 
 to test client open browser at: <br>
