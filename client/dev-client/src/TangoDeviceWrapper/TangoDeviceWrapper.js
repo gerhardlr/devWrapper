@@ -8,6 +8,7 @@ import Clock from './Clock/Clock'
 import DeviceDataservice from './DeviceDataservice/DeviceDataservice';
 import GenericCommands from './GenericCommands/GenericCommands';
 import GenericGetAttributes from './GenericGetAttributes/GenericGetAttributes';
+import Subscriber from './Subscriber/Subscriber';
 
 
 import {LogItem} from './utilities/utilities';
@@ -31,7 +32,13 @@ class TangoDeviceWrapper extends Component {
 
   componentDidMount() {
     //this.handleLog( new LogItem('socket connection initiated') );
+    //.next(result => console.log(result));
     this.socket.on( 'socket connected', () => { this.handleLog( new LogItem('socket connected')) } );
+    this.socket.on('device event',() => { this.handleLog( new LogItem('device event received')) } );
+    this.socket.on('device event error',(data) => { 
+      console.log(data);
+      return this.handleLog( new LogItem('device event error received'));
+    } );
     
   }
 
@@ -44,15 +51,16 @@ class TangoDeviceWrapper extends Component {
   }
 //
 //        <div id ="GenericCommands">Select Command to Execute<GenericCommands handleLog={this.handleLog} deviceDataService={this.deviceDataService} /></div>
-//        <div><CustomCommand handleLog={this.handleLog} deviceDataService={this.deviceDataService} /></div>
+//                <CommsHealthChecker handleLog ={this.handleLog} socket = {this.socket}/>
   render() {
       return (
         <div>
         <h1>Tango Device Wrapper for {this.props.name}</h1>
         <Clock />
-        <CommsHealthChecker handleLog ={this.handleLog} socket = {this.socket}/>
+        <CustomCommand handleLog={this.handleLog} deviceDataService={this.deviceDataService} />
         <GenericCommands handleLog={this.handleLog} deviceDataService={this.deviceDataService} />
         <GenericGetAttributes handleLog={this.handleLog} deviceDataService={this.deviceDataService}/>
+        <Subscriber deviceDataService={this.deviceDataService} socket = {this.socket}/>
         <ListItems list = {this.state.log} />
         </div>
       );

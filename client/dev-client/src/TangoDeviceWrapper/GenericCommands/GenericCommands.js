@@ -75,12 +75,12 @@ class CommandSelector extends Component {
             );
 
 		if (!this.state.inInit) {
-			inputControl = (<div id="CommandInput"><p></p><CommandInput command={this.state.selectedCommand}
+			inputControl = (<div id="CommandInput"><CommandInput command={this.state.selectedCommand}
 			deviceDataService = {this.props.deviceDataService} logResponse = {this.logResponse}/></div>);
 		} 
 		return (<div>
              <select onChange={this.handleOnChange}>
-             	<option key="no option">Select Command</option>
+             	<option key="no option">Select Command </option>
                 {optionItems}
              </select>
              {inputControl}

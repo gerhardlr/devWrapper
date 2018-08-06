@@ -2,14 +2,17 @@ import unittest
 from PyTango import DeviceProxy
 import numpy
 import json
-
+from flask_socketio import SocketIO
 import deviceWrapper
+from datetime import datetime
 
 class TestCase_001(unittest.TestCase):
 
     def setUp(self):
-        deviceWrapper.app.testing = True
-        self.app = deviceWrapper.app.test_client()
+        self.app = deviceWrapper.app
+        self.app.testing = True
+        self.client = deviceWrapper.app.test_client()
+        self.socket_app = deviceWrapper.socketio.test_client(self.app)
         self.attributes = ['ampli', 'boolean_scalar', 'double_scalar', 'double_scalar_rww', 'double_scalar_w', 'float_scalar',
      'long64_scalar', 'long_scalar', 'long_scalar_rww', 'long_scalar_w', 'short_scalar', 'short_scalar_ro',
      'short_scalar_rww', 'short_scalar_w', 'string_scalar', 'throw_exception', 'uchar_scalar', 'ulong64_scalar',
@@ -40,32 +43,88 @@ class TestCase_001(unittest.TestCase):
                          ('DumpExecutionState', None), ('Init', None), ('State', None), ('Status', None), ('SwitchStates', None)]
         self.crashCommands = [('CrashFromDevelopperThread', None), ('CrashFromOmniThread', None)]
 
+    @unittest.skip("exploration tests only")
     def test__001(self):
-        rv = self.app.get('/')
+        rv = self.client.get('/')
 
+    @unittest.skip("exploration tests only")
     def test__002(self):
-        rv = self.app.get('/REST/command_list_query/')
+        rv = self.client.get('/REST/command_list_query/')
 
+    @unittest.skip("exploration tests only")
     def test__003(self):
-        rv = self.app.get('/REST/get_attribute_list/')
+        rv = self.client.get('/REST/get_attribute_list/')
 
+    @unittest.skip("exploration tests only")
     def test__004(self):
-        rv = self.app.get('/REST/get_property_list/')
+        rv = self.client.get('/REST/get_property_list/')
 
+    @unittest.skip("exploration tests only")
     def test__005(self):
         for a in self.attributes:
-            rv = self.app.get('/REST/read_attribute/'+a)
+            rv = self.client.get('/REST/read_attribute/'+a)
+
+    @unittest.skip("exploration tests only")
     def test__006(self):
         for c in self.commands:
             try:
                 arg = json.dumps(c[1])
-                rv = self.app.post('/REST/command_inout/'+c[0],data=arg,
+                rv = self.client.post('/REST/command_inout/'+c[0],data=arg,
                        content_type='application/json')
             except Exception as e:
                 print("exeption in test 006")
                 print(c[0])
                 print(c[1])
                 raise
+
+    #@unittest.skip("exploration tests only")
+    def test_007(self):
+        rv = self.socket_app.emit('device event ack',
+                                  {'data': '',
+                                 'time':str(datetime.now()) },
+                                  namespace='/test')
+        rv=self.socket_app.get_received(namespace='/test')
+        print(rv)
+
+    #@unittest.skip("exploration tests only")
+    def test_008(self):
+        rv = self.socket_app.emit('disconnect_request',
+                                  namespace='/test')
+        rv=self.socket_app.get_received(namespace='/test')
+        print(rv)
+
+    #@unittest.skip("exploration tests only")
+    def test_009(self):
+        rv = self.socket_app.emit('ping to device', namespace='/test')
+        rv=self.socket_app.get_received(namespace='/test')
+
+
+    #@unittest.skip("exploration tests only")
+    def test_010(self):
+        rv = self.socket_app.emit('connect',
+                                  namespace='/test')
+        rv=self.socket_app.get_received(namespace='/test')
+        print(rv)
+        deviceWrapper.close_thread()
+
+
+        # @unittest.skip("exploration tests only")
+
+    def test_011(self):
+        rv = self.socket_app.emit('disconnect',
+                                  namespace='/test')
+        rv = self.socket_app.get_received(namespace='/test')
+        print(rv)
+
+    #@unittest.skip("exploration tests only")
+    def test__012(self):
+        d = json.dumps("Status")
+        rv = self.client.put('/REST/subscribe_to_attribute',data=d,
+                       content_type='application/json')
+        print(rv)
+
+
+
 
 
 

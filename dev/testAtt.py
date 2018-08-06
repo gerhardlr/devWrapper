@@ -21,3 +21,5 @@ def runTest():
     result['atts'] = atts
     result[]
     return result
+
+r = [pkt for pkt in self.queue[self.sid] if pkt['namespace'] == namespace]

@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-from threading import Lock
+from threading import Lock,Event
 import json
 from flask import Flask, render_template, session, request,jsonify, Response
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
-from PyTango import DeviceProxy,GreenMode, DevState, DevFailed,CommunicationFailed,ConnectionFailed,CmdArgType
+from PyTango import DeviceProxy,GreenMode, DevState, DevFailed,CommunicationFailed,ConnectionFailed,\
+    CmdArgType,AttributeProxy, Database
 from PyTango import EventType
 from datetime import datetime
 import Queue
@@ -22,7 +23,7 @@ from flask import g
 # different async modes, or leave it set to None for the application to choose
 # the best option based on installed packages.
 
-async_mode = "threading"
+async_mode = 'threading'
 
 app = Flask(__name__)
 CORS(app)
@@ -30,29 +31,68 @@ app.config['SECRET_KEY'] = 'secret!'
 
 socketio = SocketIO(app, async_mode=async_mode)
 thread = None
+stop_thread = Event()
 events = Queue.Queue()
 thread_lock = Lock()
 app.count = 0
+session_proxy = None
 
-#### publisch subscribe section
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
-def callback(event):
-    print("callback event called")
-    global events
-    events.put(event)
 
-#tango_test = DeviceProxy("sys/tg_test/1")
-#event_id = tango_test.subscribe_event("Status", EventType.CHANGE_EVENT, callback, [], True)
+#### publisch subscribe sectiion
+@app.before_first_request
+def function_to_run_only_once():
+    pass
+    #print("in pub sub")
+    #tango_test = DeviceProxy("sys/tg_test/1")
+    #callback = lambda event: events.put(event)
+    #event_id = tango_test.subscribe_event("Status", EventType.CHANGE_EVENT, callback, [], True)
+
+def close_thread():
+    print("closing thread")
+    global stop_thread
+    stop_thread.set()
+
+def parseEventErrors(errors):
+    x = errors.__str__()
+    x1 = re.sub(r"DevError\((.+?)\),(?<=\),)", r"{\1}", x)
+    x2 = re.sub(r"DevError\((.+?)\)\)(?<=\)\))", r"{\1}", x1)
+    x3 = re.sub(r"^\(({.+}$)", r"\1", x2)
+    x4 = re.sub(r"(?<=})\s*(?={)", ";", x3)
+    x5 = re.sub(r"=", ":", x4)
+    x6 = re.sub(r"'", "", x5)
+    x7 = re.sub(r"(?<=:\s)(.+?)\s*(?=[,}])", r"'\1'", x6)
+    x8 = re.sub(r"(?<=[{,])\s*(.+?)\s*(?=[:])", r"'\1'", x7)
+    x8 = re.sub(r"(.+)", r"[\1]", x8)
+    x9 = re.sub(";", ",", x8)
+    x10 = ast.literal_eval(x9)
+    return x10
+
+
+
+
+
 
 def background_thread():
-    """Example of how to send server generated events to clients."""
     global events
-    while True:
+    global stop_thread
+    while True: #stop_thread.is_set:
         event = events.get()
         if event:
-            print("emit device event called: " + str(datetime.now()))
-            socketio.emit('device event', {'data': event.attr_value.value, 'count': 0, 'time': str(datetime.now())},
-                      namespace='/test')
+            if (event.err != True):
+                socketio.emit('device event', {'data': event.attr_value.value,'time': str(datetime.now())},
+                        namespace='/test')
+                socketio.emit('__'+event.attr_value.name, {'data': event.attr_value.value, 'time': str(datetime.now())},
+                              namespace='/test')
+            else:
+                errors = parseEventErrors(event.errors)
+                socketio.emit('device event error', {'data': errors,'time': str(datetime.now())},
+                        namespace='/test')
+
+
         events.task_done()
 
 ####socket io section
@@ -60,24 +100,22 @@ def background_thread():
 def dev_event_ack(message):
     print("event acknowledged received at:" + str(datetime.now())+ ", event send at: " +message['time'])
 
-@socketio.on('device event ack', namespace='/test')
-def dev_event_ack(message):
-    print("socket connect acknowledged received at:" + str(datetime.now())+ ", event send at: " +message['time'])
 
 @socketio.on('disconnect_request', namespace='/test')
 def disconnect_request():
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('device event',
-         {'data': 'Disconnected!', 'count': session['receive_count'], 'time' :str(datetime.now()) })
+    print("socket disconnect request received at" + str(datetime.now()))
+    emit('socket disconnected',
+         {'data': 'Disconnected!', 'time' :str(datetime.now())} )
     disconnect()
 
+
 @socketio.on('ping to server', namespace='/test')
-def ping_pong():
-    print("pong emmitted")
+def ping_to_server():
+    print("ping to server received")
     emit('pong to client')
 
 @socketio.on('ping to device', namespace='/test')
-def dev_ping_pong():
+def ping_to_device():
     print('server asked to ping from device')
     p = DeviceProxy("sys/tg_test/1")
     elapsed_time = p.ping()
@@ -87,9 +125,11 @@ def dev_ping_pong():
 @socketio.on('connect', namespace='/test')
 def test_connect():
     global thread
+    global session_proxy
     with thread_lock:
         if thread is None:
             thread = socketio.start_background_task(target=background_thread)
+        session_proxy = DeviceProxy("sys/tg_test/1")
     emit('socket connected', {'data': 'Connected', 'count': 0 , 'time' :str(datetime.now())})
 
 @socketio.on('disconnect', namespace='/test')
@@ -141,6 +181,39 @@ def encodeArg(command,arg,p):
         CmdArgType.DevVarFloatArray: 'intArray',
         CmdArgType.DevVarUShortArray: 'intArray',
     }
+
+@app.route('/REST/subscribe_to_attribute',methods =['PUT'])
+def subscribe_to_attribute():
+    print("in subscribe_to_attribute")
+    global events
+    session_proxy
+    callback = lambda event: events.put(event)
+    data = request.get_json()
+    attribute = data['attribute'].encode("utf-8")
+    polling = int(data['polling'])
+    print("setting subscription for "+attribute+" to polling period of "+str(polling))
+    try:
+        with thread_lock:
+            session_proxy.poll_attribute(attribute,polling)
+            event_id = session_proxy.subscribe_event(attribute, EventType.PERIODIC_EVENT, callback, [], True)
+        #3 session_proxy.unsubscribe_event(event_id)
+
+    except (CommunicationFailed,ConnectionFailed,DevFailed) as e:
+        return jsonify(handleException(e))
+    return jsonify(event_id)
+
+@app.route('/REST/unsubscribe_to_attribute',methods =['PUT'])
+def unsubscribe_to_attribute():
+    print("in unsubscribe_to_attribute")
+    event_id = request.get_json()
+    print("unsubscribing with id: "+str(event_id));
+    global session_proxy
+    try:
+        with thread_lock:
+            session_proxy.unsubscribe_event(event_id)
+    except (CommunicationFailed,ConnectionFailed,DevFailed) as e:
+        return jsonify(handleException(e))
+    return jsonify(event_id)
 
 
 
@@ -264,8 +337,7 @@ def index():
 
 
 if __name__ == '__main__':
-    #tango_test = DeviceProxy("sys/tg_test/1")
-    #event_id = tango_test.subscribe_event("Status", EventType.CHANGE_EVENT, callback, [], True)
+
     socketio.run(app, debug=True)
    # tango_test = DeviceProxy("sys/tg_test/1")
    # event_id = tango_test.subscribe_event("Status", EventType.CHANGE_EVENT, callback, [], True)

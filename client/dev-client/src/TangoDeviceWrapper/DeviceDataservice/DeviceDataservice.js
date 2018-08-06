@@ -87,11 +87,20 @@ export default class DeviceDataservice {
 	}
 
 	read_attribute(attribute) {
-		return this.Get('read_attribute/'+attribute)
+		return this.Get('read_attribute/'+attribute);
 	}
 	///posts
 	command_inout(command,args){
-		return this.Post("command_inout/"+command,args)
+		return this.Post("command_inout/"+command,args);
+	}
+
+	//puts
+	subscribe_to_attibute(attribute){
+		return this.Put("subscribe_to_attribute", attribute);
+	}
+
+	unsubscribe_to_attibute(eventID){
+		return this.Put("unsubscribe_to_attribute", eventID);
 	}
 
 }
