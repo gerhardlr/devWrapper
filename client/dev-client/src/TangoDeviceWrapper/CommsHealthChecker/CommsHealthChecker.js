@@ -14,8 +14,8 @@ class CommsHealthChecker extends Component {
   }
 
   componentDidMount() {
-    this.timerID = setInterval( () => this.ping() , 10000 );
-    this.devTimerID = setInterval( () => this.devPing(), 10000);
+    this.timerID = setInterval( () => this.ping() , 1000 );
+    this.devTimerID = setInterval( () => this.devPing(), 1000);
     this.props.socket.on('pong to client', () => this.pong()); 
     this.props.socket.on('pong from device', (msg) => this.devPong(msg));
   }

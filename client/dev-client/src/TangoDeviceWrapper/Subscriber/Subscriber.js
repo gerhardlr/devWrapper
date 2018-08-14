@@ -13,7 +13,8 @@ class Subscriber extends Component{
     	}
     	this.loadAttributes = this.loadAttributes.bind(this);
     	this.handleOnChange = this.handleOnChange.bind(this);
-    	this.props.deviceDataService.get_property_list().then(response => this.loadAttributes(response)).then(response => console.log(response));
+    	this.props.deviceDataService.get_attribute_list().then(response => console.log(response))
+    	//then(response => this.loadAttributes(response));
     }
 
 	loadAttributes(response){

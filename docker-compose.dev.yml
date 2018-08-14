@@ -2,10 +2,7 @@ version: '3'
 
 services:
   dev:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: dev
+    image: gerhardlr/tango_python:latest
     container_name: dev
     volumes:
       - $DEV_HOME:/app

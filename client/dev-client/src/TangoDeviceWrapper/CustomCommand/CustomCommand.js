@@ -11,7 +11,6 @@ class CustomCommand extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    console.log(this.props)
   }
 
   handleChange(event) {
@@ -24,9 +23,9 @@ class CustomCommand extends Component {
     this.setState({command: ''});
     //fetch('http://localhost:5003/REST/test', {mode :'cors'}).then(response => console.log(response.text()));
    // this.props.deviceDataService.command_list_query().then(response => console.log(response));
-   // this.props.deviceDataService.get_attribute_list().then(response => console.log(response));
+    this.props.deviceDataService.get_attribute_list().then(response => console.log(response));
    // this.props.deviceDataService.command_inout("DevString","test").then(response => console.log(response));
-     this.props.deviceDataService.subscribe_to_attibute({attribute:'double_scalar',polling :1000}).then(response =>console.log(response))
+    // this.props.deviceDataService.subscribe_to_attibute({attribute:'double_scalar',polling :1000}).then(response =>console.log(response))
   }
 
   render() {
