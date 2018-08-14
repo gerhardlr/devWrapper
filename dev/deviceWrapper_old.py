@@ -5,8 +5,7 @@ from flask import Flask, render_template, session, request,jsonify, Response
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
-from PyTango import DeviceProxy
-from PyTango import GreenMode, DevState, DevFailed,CommunicationFailed,ConnectionFailed,\
+from PyTango import DeviceProxy,GreenMode, DevState, DevFailed,CommunicationFailed,ConnectionFailed,\
     CmdArgType,AttributeProxy, Database
 from PyTango import EventType
 from datetime import datetime
@@ -24,7 +23,7 @@ from flask import g
 # different async modes, or leave it set to None for the application to choose
 # the best option based on installed packages.
 
-async_mode = 'gevent'
+async_mode = 'threading'
 
 app = Flask(__name__)
 CORS(app)
@@ -32,50 +31,28 @@ app.config['SECRET_KEY'] = 'secret!'
 
 socketio = SocketIO(app, async_mode=async_mode)
 thread = None
-threadnr = 0
 stop_thread = Event()
 events = Queue.Queue()
 thread_lock = Lock()
 app.count = 0
 session_proxy = None
-disable_Pytango = True
 
 import logging
-Log = logging.getLogger('werkzeug')
-Log.setLevel(logging.ERROR)
-log_level = "dh"
-
-
-def Log(message,type = 'd'):
-    #Log("test",'d')
-    global log_level
-    if type in log_level:
-            print(message)
-
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 
 #### publisch subscribe sectiion
 @app.before_first_request
 def function_to_run_only_once():
-    Log("in starting thread",'h')
-    global thread
-    global threadnr
-    global session_proxy
-    with thread_lock:
-        if thread is None:
-            threadnr += 1
-            Log('starting thread nr:'+str(threadnr),'h')
-          ###_#  thread = socketio.start_background_task(target=background_thread)
-        global disable_Pytango
-        if disable_Pytango:
-            session_proxy = "" ###_#(DeviceProxy("sys/tg_test/1"))
-    #Log("in pub sub",'d')
+    pass
+    #print("in pub sub")
     #tango_test = DeviceProxy("sys/tg_test/1")
     #callback = lambda event: events.put(event)
     #event_id = tango_test.subscribe_event("Status", EventType.CHANGE_EVENT, callback, [], True)
 
 def close_thread():
-    Log("closing thread",'d')
+    print("closing thread")
     global stop_thread
     stop_thread.set()
 
@@ -100,7 +77,6 @@ def parseEventErrors(errors):
 
 
 def background_thread():
-    Log("starting thread",'h')
     global events
     global stop_thread
     while True: #stop_thread.is_set:
@@ -120,22 +96,14 @@ def background_thread():
         events.task_done()
 
 ####socket io section
-@socketio.on('ping',namespace='test')
-def def_ping():
-    pass
-    #Log("responding to ping on"+request.sid, '
-
-
-
-
 @socketio.on('device event ack', namespace='/test')
 def dev_event_ack(message):
-    Log("event acknowledged received at:" + str(datetime.now())+ ", event send at: " +message['time'],'d')
+    print("event acknowledged received at:" + str(datetime.now())+ ", event send at: " +message['time'])
 
 
 @socketio.on('disconnect_request', namespace='/test')
 def disconnect_request():
-    Log("socket disconnect request received at" + str(datetime.now()),'d')
+    print("socket disconnect request received at" + str(datetime.now()))
     emit('socket disconnected',
          {'data': 'Disconnected!', 'time' :str(datetime.now())} )
     disconnect()
@@ -143,27 +111,31 @@ def disconnect_request():
 
 @socketio.on('ping to server', namespace='/test')
 def ping_to_server():
-    Log("ping to server received on session:"+request.sid,'dh')
+    print("ping to server received")
     emit('pong to client')
 
 @socketio.on('ping to device', namespace='/test')
 def ping_to_device():
-    Log('server asked to ping from device','d')
-    global disable_Pytango
-    if disable_Pytango:
-        ###_#p = DeviceProxy("sys/tg_test/1")
-        elapsed_time ="" ###_#( p.ping())
-        emit("pong from device", {'elapsed': elapsed_time})
-        Log('client ponged from device','d')
+    print('server asked to ping from device')
+    p = DeviceProxy("sys/tg_test/1")
+    elapsed_time = p.ping()
+    emit("pong from device", {'elapsed': elapsed_time})
+    print('client ponged from device')
 
 @socketio.on('connect', namespace='/test')
 def test_connect():
+    print("in test_connect")
+    global thread
+    global session_proxy
+    with thread_lock:
+        if thread is None:
+            thread = socketio.start_background_task(target=background_thread)
+        session_proxy = DeviceProxy("sys/tg_test/1")
     emit('socket connected', {'data': 'Connected', 'count': 0 , 'time' :str(datetime.now())})
 
 @socketio.on('disconnect', namespace='/test')
 def test_disconnect():
-    Log('Client disconnected for'+request.sid,'h')
-
+    print('Client disconnected', request.sid)
 
 ####REST API section
 def handleException(e):
@@ -179,14 +151,14 @@ def handleException(e):
         errors.append({'reason':error.reason,'severity':error.severity.name,'desc':error.desc,'origin':error.origin})
     response['errors'] = errors
     if app.testing:
-        Log("exception caught",'d')
-        Log(response,'d')
+        print("exception caught")
+        print(response)
     return response
 
 def encodeArg(command,arg,p):
     #TODO
 
-    commandInfo ="" ###_#( p.command_query(command))
+    commandInfo = p.command_query(command)
     inputType = commandInfo.in_type
     Mapp = {
         CmdArgType.DevBoolean : 'bool',
@@ -213,20 +185,18 @@ def encodeArg(command,arg,p):
 
 @app.route('/REST/subscribe_to_attribute',methods =['PUT'])
 def subscribe_to_attribute():
-    Log("in subscribe_to_attribute",'d')
+    print("in subscribe_to_attribute")
     global events
-    global session_proxy
+    session_proxy
     callback = lambda event: events.put(event)
     data = request.get_json()
     attribute = data['attribute'].encode("utf-8")
     polling = int(data['polling'])
-    Log("setting subscription for "+attribute+" to polling period of "+str(polling),'d')
+    print("setting subscription for "+attribute+" to polling period of "+str(polling))
     try:
         with thread_lock:
-            global disable_Pytango
-            if not disable_Pytango:
-               # session_proxy.poll_attribute(attribute,polling)
-                event_id =  1##_#session_proxy.subscribe_event(attribute, EventType.PERIODIC_EVENT, callback, [], True)
+            session_proxy.poll_attribute(attribute,polling)
+            event_id = session_proxy.subscribe_event(attribute, EventType.PERIODIC_EVENT, callback, [], True)
         #3 session_proxy.unsubscribe_event(event_id)
 
     except (CommunicationFailed,ConnectionFailed,DevFailed) as e:
@@ -235,16 +205,13 @@ def subscribe_to_attribute():
 
 @app.route('/REST/unsubscribe_to_attribute',methods =['PUT'])
 def unsubscribe_to_attribute():
-    Log("in unsubscribe_to_attribute",'d')
+    print("in unsubscribe_to_attribute")
     event_id = request.get_json()
-    Log("unsubscribing with id: "+str(event_id),'d');
+    print("unsubscribing with id: "+str(event_id));
     global session_proxy
     try:
         with thread_lock:
-            global disable_Pytango
-            if not disable_Pytango:
-                pass
-            ###_#    session_proxy.unsubscribe_event(event_id)
+            session_proxy.unsubscribe_event(event_id)
     except (CommunicationFailed,ConnectionFailed,DevFailed) as e:
         return jsonify(handleException(e))
     return jsonify(event_id)
@@ -253,26 +220,22 @@ def unsubscribe_to_attribute():
 
 @app.route('/REST/command_inout/<command>',methods=['POST'])
 def command_inout(command):
-    Log("in command_inout",'d')
+    print("in command_inout")
     arg = request.get_json()
-    Log(arg,'d')
+    print(arg)
     try:
-        global disable_Pytango
-        if not disable_Pytango:
-            ###_#p = DeviceProxy("sys/tg_test/1")
-            encodedArg = arg #encodeArg(command,arg,p)
-            if (encodedArg == 'null'):
-                result ="" ###_#( p.command_inout(command))
-            else:
-                result ="" ###_#( p.command_inout(command, encodedArg))
-            if isinstance(result, numpy.ndarray):
-                result = result.tolist()
-            elif isinstance(result,list):
-                result = re.sub(r"([\d.]+)",r"'\1'",result.__str__())
-            if app.testing:
-                Log(json.dumps(result),'d')
+        p = DeviceProxy("sys/tg_test/1")
+        encodedArg = arg #encodeArg(command,arg,p)
+        if (encodedArg == 'null'):
+            result = p.command_inout(command)
         else:
-            result = ""
+            result = p.command_inout(command, encodedArg)
+        if isinstance(result, numpy.ndarray):
+            result = result.tolist()
+        elif isinstance(result,list):
+            result = re.sub(r"([\d.]+)",r"'\1'",result.__str__())
+        if app.testing:
+            print(json.dumps(result))
         return jsonify(json.dumps(result))
     except (CommunicationFailed,ConnectionFailed,DevFailed) as e:
         return jsonify(handleException(e))
@@ -281,13 +244,13 @@ def command_inout(command):
 def testRest():
     print ("in testREST")
     if request.method == 'POST':
-        Log("sended a POST response",'d')
+        print("sended a POST response")
         return jsonify(request.get_json())
     elif request.method == 'PUT':
-        Log("sended a PUT response",'d')
+        print("sended a PUT response")
         return jsonify(request.get_json())
     elif request.method == 'GET':
-        Log("sended a GET response",'d')
+        print("sended a GET response")
         return jsonify({'data' : 'adgad'})
 
 def parseAttribute(attribute):
@@ -317,69 +280,53 @@ def parseCommandInfoList(data):
     x3 = re.sub("'", "", x2)
     x4 = re.sub(r"([\w.\-/]+)", r"'\1'", x3)
     x5 = re.sub("=", ":", x4)
-    return "" ###_#ast.literal_eval(x5)
+    return ast.literal_eval(x5)
 
 def parseStdStringVector(data):
     x1 = data.__str__()
-    return "" ###_#ast.literal_eval(x1)
+    return ast.literal_eval(x1)
 
 @app.route('/REST/read_attribute/<attribute>')
 def read_attribute(attribute):
     if app.testing:
-        Log("in read_attribute",'d')
+        print("in read_attribute")
     try:
-        global disable_Pytango
-        if not disable_Pytango:
-            ######_####_#p = DeviceProxy("sys/tg_test/1")
-            redAttribute ="" ###_#( p.read_attribute(attribute))
-            response = parseAttribute(redAttribute)
-        else:
-            response = ""
+        p = DeviceProxy("sys/tg_test/1")
+        redAttribute = p.read_attribute(attribute)
+        response = parseAttribute(redAttribute)
         return jsonify(response)
     except (CommunicationFailed,ConnectionFailed,DevFailed) as e:
         return jsonify(handleException(e))
 
 @app.route('/REST/get_property_list/')
 def get_property_list():
-    Log("in get_property_list",'d')
+    print("in get_property_list")
     try:
-        global disable_Pytango
-        if not disable_Pytango:
-            ###_#p = DeviceProxy("sys/tg_test/1")
-            properties ="" ###_#( p.get_attribute_list())
-            parsedProperties = [{},{},{}]###_#parseStdStringVector(properties)
-        else:
-            parsedProperties =""
+        p = DeviceProxy("sys/tg_test/1")
+        properties = p.get_attribute_list()
+        parsedProperties = parseStdStringVector(properties)
         return jsonify(parsedProperties)
     except (CommunicationFailed, ConnectionFailed, DevFailed) as e:
         return jsonify(handleException(e))
 
 @app.route('/REST/get_attribute_list/')
 def get_attribute_list():
-    Log("in get_attribute_list",'d')
+    print("in get_attribute_list")
     try:
-        global disable_Pytango
-        if not disable_Pytango:
-            ###_#p = DeviceProxy("sys/tg_test/1")
-            attributes ="" ###_#( p.get_attribute_list())
-            parsedAttributes = [{},{},{}]###_#parseStdStringVector(attributes)
-        else:
-            parsedAttributes = [{},{},{}]
+        p = DeviceProxy("sys/tg_test/1")
+        attributes = p.get_attribute_list()
+        parsedAttributes = parseStdStringVector(attributes)
         return jsonify(parsedAttributes)
     except (CommunicationFailed,ConnectionFailed,DevFailed) as e:
         return jsonify(handleException(e))
 
 @app.route('/REST/command_list_query/')
 def command_list_query():
-    Log("in command_list_query",'d')
+    print("in command_list_query")
     try:
-        global disable_Pytango
-        if not disable_Pytango:
-            ###_#p = DeviceProxy("sys/tg_test/1")
-            commands ="" ###_#( p.command_list_query())
-            parsedCommands = ["command 1","command2","command3"]###_#parseCommandInfoList(commands)
-        else:
-            parsedCommands=["command 1","command2","command3"]
+        p = DeviceProxy("sys/tg_test/1")
+        commands = p.command_list_query()
+        parsedCommands = parseCommandInfoList(commands)
         return jsonify(parsedCommands)
     except (CommunicationFailed,ConnectionFailed,DevFailed) as e:
         return jsonify(handleException(e))

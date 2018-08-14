@@ -5,7 +5,8 @@ import CommsHealthChecker from './CommsHealthChecker/CommsHealthChecker';
 import CustomCommand from './CustomCommand/CustomCommand';
 import ListItems from './ListItems/ListItems';
 import Clock from './Clock/Clock'
-import DeviceDataservice from './DeviceDataservice/DeviceDataservice';
+//import DeviceDataservice from './DeviceDataservice/DeviceDataservice';// uncomment if wanting to connect to real server
+import DeviceDataservice from './DeviceDataServiceMock/DeviceDataServiceMock';// for testing connection to server
 import GenericCommands from './GenericCommands/GenericCommands';
 import GenericGetAttributes from './GenericGetAttributes/GenericGetAttributes';
 import Subscriber from './Subscriber/Subscriber';
@@ -33,7 +34,6 @@ class TangoDeviceWrapper extends Component {
   componentDidMount() {
     //this.handleLog( new LogItem('socket connection initiated') );
     //.next(result => console.log(result));
-    console.log("in componentDidMount");
     this.socket.on( 'socket connected', () => { this.handleLog( new LogItem('socket connected')) } );
     this.socket.on('device event',() => { this.handleLog( new LogItem('device event received')) } );
     this.socket.on('device event error',(data) => { 

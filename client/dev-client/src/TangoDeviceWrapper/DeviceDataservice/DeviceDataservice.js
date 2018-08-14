@@ -5,8 +5,6 @@ export default class DeviceDataservice {
 		this.mode ='cors';
 		this.handleError = handleError;
 		this.handleError = this.handleError.bind(this);
-		this.putPostPayload = 
-		this.getPayload
 	}
 
 	encodeParameters(parameters){
