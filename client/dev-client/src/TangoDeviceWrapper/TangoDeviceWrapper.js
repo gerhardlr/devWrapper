@@ -10,6 +10,8 @@ import DeviceDataservice from './DeviceDataServiceMock/DeviceDataServiceMock';//
 import GenericCommands from './GenericCommands/GenericCommands';
 import GenericGetAttributes from './GenericGetAttributes/GenericGetAttributes';
 import Subscriber from './Subscriber/Subscriber';
+import CssModules from 'react-css-modules';
+import styles from './style.css'
 
 
 import {LogItem} from './utilities/utilities';
@@ -57,19 +59,38 @@ class TangoDeviceWrapper extends Component {
 //
 //        <div id ="GenericCommands">Select Command to Execute<GenericCommands handleLog={this.handleLog} deviceDataService={this.deviceDataService} /></div>
 //                <CommsHealthChecker handleLog ={this.handleLog} socket = {this.socket}/>
+//<tr><td><CustomCommand handleLog={this.handleLog} deviceDataService={this.deviceDataService} /></td></tr>
   render() {
       return (
         <div>
-        <h1>Tango Device Wrapper for {this.props.name}</h1>
-        <Clock />
-        <CommsHealthChecker handleLog ={this.handleLog} socket = {this.socket}/>
-        <CustomCommand handleLog={this.handleLog} deviceDataService={this.deviceDataService} />
-        <GenericCommands handleLog={this.handleLog} deviceDataService={this.deviceDataService} />
-        <GenericGetAttributes handleLog={this.handleLog} deviceDataService={this.deviceDataService}/>
-        <Subscriber deviceDataService={this.deviceDataService} socket = {this.socket}/>
-        <ListItems list = {this.state.log} />
+          <div styleName="border_line"></div>
+          <table styleName="grid1">
+          <tr>
+            <td><Clock /></td>
+            <td><h1 styleName="main_heading">Tango Device Wrapper for {this.props.name}</h1></td>
+            <td><CommsHealthChecker handleLog ={this.handleLog} socket = {this.socket}/></td>
+          </tr>
+          </table>
+          <div styleName = "border_line"></div>
+          <table styleName = "grid2">
+          <tr>
+            <td>
+              <table>
+              <tr><td><GenericCommands handleLog={this.handleLog} deviceDataService={this.deviceDataService} /></td></tr>
+              <tr><td><GenericGetAttributes handleLog={this.handleLog} deviceDataService={this.deviceDataService}/></td></tr>
+              </table>
+            </td> 
+            <td>
+              <ListItems list = {this.state.log} /> 
+            </td>
+            <td>
+              Select Attribute to subscribe to
+              <Subscriber deviceDataService={this.deviceDataService} socket = {this.socket}/>
+            </td>
+          </tr>
+          </table>
         </div>
       );
   }
  }
-export default TangoDeviceWrapper;
+ export default CssModules(TangoDeviceWrapper, styles);

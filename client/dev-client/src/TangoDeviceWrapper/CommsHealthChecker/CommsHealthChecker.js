@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {LogItem} from '../utilities/utilities';
+import CssModules from 'react-css-modules';
+import styles from './style.css'
 
 
 class CommsHealthChecker extends Component {
@@ -73,6 +75,8 @@ class CommsHealthChecker extends Component {
     } else return 0;
   }
 
+
+
   getDevAverageLatency() {
     if (this.state.dev_ping_pong_times.length > 1) {
       const mapped_array = this.state.dev_ping_pong_times.map(element => element.total);
@@ -88,23 +92,34 @@ class CommsHealthChecker extends Component {
   }
 
   render() {
+    let DevAverageLatency = this.getDevAverageLatency();
+    let AverageLatency = this.getAverageLatency();
+    let AverageDevTimeElapsed = this.getAverageDevTimeElapsed ();
+    let DevAverageLatencyInPercentage = Math.round((DevAverageLatency/100)*100)+"%";
+    let AverageLatencyInPercentage = Math.round((AverageLatency/100)*100)+"%";
+    let AverageDevTimeElapsedInPercentage = Math.round((AverageDevTimeElapsed/1000)*100)+"%";
+    let barwidth = ("barwidth" in this.props) ? this.prop.barwidth : "100px";
     return (
       <div>
-        <div>
-        <p> Average Total Latency: {this.getDevAverageLatency()} ms</p>
-        </div>
-        <div>
-        <p> Average Server only latency : {this.getAverageLatency()} ms</p>
-        </div>
-        <div>
-        <p> Average Device only latency (time elapsed): {this.getAverageDevTimeElapsed()} us</p>
-        </div>
+        <table>
+          <tr>
+          <td>Lat Tot ({DevAverageLatency} ms)</td>
+          <td style={{width:barwidth}}><div styleName = "top_speed_bar" style = {{width: DevAverageLatencyInPercentage}}></div></td>  
+          </tr>
+          <tr>
+          <td>Lat Ser ({AverageLatency} ms)</td>
+          <td style={{width:barwidth}}><div styleName = "middle_speed_bar"  style = {{width: AverageLatencyInPercentage}}></div></td> 
+          </tr>
+          <tr>
+          <td>Dev Lat ({AverageDevTimeElapsed} us)</td>
+          <td style={{width:barwidth}}><div styleName = "bottom_speed_bar" style = {{width: AverageDevTimeElapsedInPercentage}}></div></td> 
+          </tr>   
+        </table>
       </div>
       )
   }
 }
-
-export default CommsHealthChecker;
+export default CssModules(CommsHealthChecker, styles);
 
 //helpers (private classes)
 class pingPong {

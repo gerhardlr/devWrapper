@@ -1,0 +1,20 @@
+.top_speed_bar{
+	background-color: cadetblue;
+	height: 5px;
+	margin-top: 1px;
+	margin-bottom: 1px;
+
+}
+.middle_speed_bar{
+	background-color: cornflowerblue;
+	height: 5px;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+.bottom_speed_bar{
+	background-color: darkcyan;
+	height: 5px;
+	margin-top: 1px;
+	margin-bottom: 1px;
+	
+}

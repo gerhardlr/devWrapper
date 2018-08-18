@@ -9,6 +9,7 @@ RUN curl --silent --location https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install --yes nodejs
 RUN apt-get install --yes build-essential
 RUN npm install -g create-react-app
+RUN npm install -g yarnpkg@0.15.1
 
 
 RUN mkdir /client

@@ -1,0 +1,26 @@
+.border_line {
+	width: 100%;
+	height:2px;
+	background-color: black
+}
+.main_heading {
+	text-align: center;
+}
+.row_box1{
+
+}
+.cell_box1_1{
+	float: left;
+}
+.cell_box1_2{
+  	margin-left: 10px;
+}
+.clear{
+	clear: both;
+}
+.grid1{
+	width :100%;
+}
+.grid2{
+	width :100%;
+}
