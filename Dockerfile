@@ -4,6 +4,7 @@ FROM gerhardlr/tango_python:latest
 USER root
 
 # Install Node.js
+RUN apt-get update
 RUN apt-get install --yes curl
 RUN curl --silent --location https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install --yes nodejs
