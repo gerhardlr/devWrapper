@@ -20,4 +20,4 @@ services:
 networks:
   default:
     external:
-      name: $DOCKER_NETWORK
+      name: DOCKER_NETWORK
