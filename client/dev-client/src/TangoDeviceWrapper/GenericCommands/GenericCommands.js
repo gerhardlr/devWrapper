@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import {LogItem} from '../utilities/utilities';
 import {makeMessage} from '../utilities/utilities';
 import Console from '../Console/Console' ;
-import '../Console/Console.css'
+import '../Console/Console.css';
+import CssModules from 'react-css-modules';
+import styles from './style.css';
 
 class GenericCommands extends Component {
 
@@ -34,9 +36,15 @@ class GenericCommands extends Component {
   	render(){
   		return (
   			<div id = "GenericCommands">
-  			<Console messages = {this.state.messages}/>
-  			<CommandSelector commands = {this.state.commands} deviceDataService={this.props.deviceDataService}
-  			 logResponse={this.logResponse}/>
+          <table>
+            <tr> 
+  			      <td><Console messages = {this.state.messages}/></td>
+            </tr>
+  			    <tr>
+              <td><CommandSelector commands = {this.state.commands}
+               deviceDataService={this.props.deviceDataService}logResponse={this.logResponse}/></td>
+            </tr>
+           </table>
   			</div>)
   	}
 
@@ -79,11 +87,17 @@ class CommandSelector extends Component {
 			deviceDataService = {this.props.deviceDataService} logResponse = {this.logResponse}/></div>);
 		} 
 		return (<div>
+            <table>
+            <tr><td>
              <select onChange={this.handleOnChange}>
              	<option key="no option">Select Command </option>
                 {optionItems}
              </select>
+             </td></tr>
+             <tr><td>
              {inputControl}
+             </td></tr>
+             </table>
          	</div>)
 	}
 }
@@ -126,18 +140,29 @@ class CommandInput extends Component {
   	render() {
   		let to_render ="";
   		let input = "";
+      const button_style = {
+        backgroundColor: 'cadetblue',
+        borderRadius: '0px',
+      }
   		if (this.props.command != null) {
 	  		if (this.props.command.in_type != "tango._tango.CmdArgType.DevVoid"){
 	  			input = (
+            <td>
 	  				<label>
 	          		Input Argument 
 	          		<input type="text" value={this.state.input} onChange={this.handleChange} />
-	          		</label>);
+	          </label>
+            </td>
+            );
 	        }
 	    	to_render = (
 	      	<form onSubmit={this.handleSubmit}>
-	      		{input}
-	        	<input type="submit" value={"submit: "+this.props.command.cmd_name} />
+          <table>
+          <tr>
+            {input}
+            <td><input type="submit" style={button_style} value={"submit: "+this.props.command.cmd_name} /></td>
+          </tr>
+          </table>
 	     	 </form>);
     	}
     	return (<div> {to_render} </div>);
@@ -145,10 +170,7 @@ class CommandInput extends Component {
 }
 
 
-
-
-
-export default GenericCommands
+export default CssModules(GenericCommands, styles);
 
 
 

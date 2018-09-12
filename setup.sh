@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-docker network create docker-network
+#!/usr/bin/env bashsetucker-network
 export DOCKER_NETWORK=docker-network
 docker-compose -f docker-compose.tangobase.yaml up -d
 docker-compose -f docker-compose.tango_gui.yaml up -d
