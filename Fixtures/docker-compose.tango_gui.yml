@@ -10,7 +10,7 @@
 #   - tbase/docker compose up
 #   - external networ must be defined by docker network create $DOCKER_NETWORK
 
-version: '2'
+version: '3'
 
 services:
   jive:
@@ -26,11 +26,11 @@ services:
       - --strict
       - --
       - /usr/local/bin/jive
-      #- tail -f /dev/null
+      #- tail -f /server/null
     ports:
       - 5901:5901
       - 6901:6901
 networks:
   default:
     external:
-      name: DOCKER_NETWORK
+      name: docker-network
