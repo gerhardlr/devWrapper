@@ -2,35 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36527e3f-8c20-44e9-8811-c9e0525f381b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Fixtures/setdown.bat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/Dockerfile" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/runDev.bat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/runDev.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/setDownFixtures.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/setUpFixtures.sh" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/docker-compose.dev.yml" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Dockerfile" afterPath="$PROJECT_DIR$/client/Dockerfile" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/dev/DW_REST_API.py" afterPath="$PROJECT_DIR$/server/DW_REST_API.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/dev/deviceWrapper.py" afterPath="$PROJECT_DIR$/server/deviceWrapper.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/dev/deviceWrapper_old.py" afterPath="$PROJECT_DIR$/server/deviceWrapper_old.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/dev/t.py" afterPath="$PROJECT_DIR$/server/t.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/dev/templates/ListItems" afterPath="$PROJECT_DIR$/server/templates/ListItems" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/dev/templates/clock.js" afterPath="$PROJECT_DIR$/server/templates/clock.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/dev/templates/deviceWrapper.js" afterPath="$PROJECT_DIR$/server/templates/deviceWrapper.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/dev/templates/index.html" afterPath="$PROJECT_DIR$/server/templates/index.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/dev/templates/index2.html" afterPath="$PROJECT_DIR$/server/templates/index2.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/dev/testAtt.py" afterPath="$PROJECT_DIR$/server/testAtt.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/dev/test_server.py" afterPath="$PROJECT_DIR$/server/test_server.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/dev/test_t.py" afterPath="$PROJECT_DIR$/server/test_t.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/docker-compose.tango_gui.yaml" afterPath="$PROJECT_DIR$/Fixtures/docker-compose.tango_gui.yml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/docker-compose.tangobase.yaml" afterPath="$PROJECT_DIR$/Fixtures/docker-compose.tangobase.yml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/server/requirements.txt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/runDev.bat" afterPath="$PROJECT_DIR$/client/runDev.bat" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/runDev.sh" afterPath="$PROJECT_DIR$/client/runDev.sh" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/setdown.sh" afterPath="$PROJECT_DIR$/Fixtures/setdown.sh" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/setup.bat" afterPath="$PROJECT_DIR$/Fixtures/setup.bat" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/setup.sh" afterPath="$PROJECT_DIR$/Fixtures/setup.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/setDownFixtures.bat" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/setUpFixtures.bat" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Fixtures/setdown.bat" afterPath="$PROJECT_DIR$/Fixtures/setdown.bat" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -41,16 +16,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="runDev.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/runDev.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="9" lean-forward="true" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="docker-compose.tangobase.yml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Fixtures/docker-compose.tangobase.yml">
           <provider selected="true" editor-type-id="text-editor">
@@ -71,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="setdown.bat" pinned="false" current-in-tab="false">
+      <file leaf-file-name="setdown.bat" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Fixtures/setdown.bat">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="28" lean-forward="false" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
+            <state relative-caret-position="15">
+              <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="2" selection-end-column="68" />
               <folding />
             </state>
           </provider>
@@ -101,11 +66,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="setup.sh" pinned="false" current-in-tab="true">
+      <file leaf-file-name="setup.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Fixtures/setup.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="30">
               <caret line="2" column="44" lean-forward="false" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="44" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="setUpFixtures.bat" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/setUpFixtures.bat">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="9" lean-forward="false" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="setDownFixtures.bat" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/setDownFixtures.bat">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="11" lean-forward="false" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -121,21 +106,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="runDev.bat" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/runDev.bat">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="185" lean-forward="false" selection-start-line="7" selection-start-column="185" selection-end-line="7" selection-end-column="185" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="setdown.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Fixtures/setdown.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="44" lean-forward="false" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="68" />
               <folding />
             </state>
           </provider>
@@ -222,9 +197,11 @@
         <option value="$PROJECT_DIR$/Fixtures/docker-compose.tangobase.yaml" />
         <option value="$PROJECT_DIR$/Fixtures/docker-compose.tango_gui.yaml" />
         <option value="$PROJECT_DIR$/setDownFixtures.sh" />
-        <option value="$PROJECT_DIR$/Fixtures/setdown.sh" />
         <option value="$PROJECT_DIR$/Fixtures/setup.sh" />
         <option value="$PROJECT_DIR$/Fixtures/setup.bat" />
+        <option value="$PROJECT_DIR$/setUpFixtures.bat" />
+        <option value="$PROJECT_DIR$/setDownFixtures.bat" />
+        <option value="$PROJECT_DIR$/Fixtures/setdown.sh" />
         <option value="$PROJECT_DIR$/Fixtures/setdown.bat" />
       </list>
     </option>
@@ -338,7 +315,7 @@
     <frame x="57" y="103" width="1946" height="823" extended-state="0" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26498002" sideWeight="0.22199383" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26498002" sideWeight="0.22199383" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43142477" sideWeight="0.75476193" order="9" side_tool="false" content_ui="tabs" />
@@ -372,21 +349,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/server/testAtt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="74" lean-forward="false" selection-start-line="24" selection-start-column="74" selection-end-line="24" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/test_server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1800">
-          <caret line="120" column="28" lean-forward="false" selection-start-line="120" selection-start-column="28" selection-end-line="120" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -673,30 +635,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/setDownFixtures.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="10" lean-forward="false" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Fixtures/setdown.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="44" lean-forward="false" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Fixtures/setdown.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="28" lean-forward="false" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Fixtures/setup.bat">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -709,6 +647,46 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="44" lean-forward="false" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setUpFixtures.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="9" lean-forward="false" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setDownFixtures.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="11" lean-forward="false" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setDownFixtures.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="10" lean-forward="false" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Fixtures/setdown.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Fixtures/setdown.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="2" selection-end-column="68" />
           <folding />
         </state>
       </provider>
