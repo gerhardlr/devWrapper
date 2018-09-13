@@ -1,13 +1,19 @@
 # devWrapper
-<h3> to start up tango environment </h3>
-<p> sh setup.sh </p>
-<h3> to run server container </h3>
-<p> sh runDev.sh </p>
-<h3> then... </h3>
-<p> to start client: open up a new shell </p>
-<p> type in: docker exec -it flaskio bash </p>
-<p> type in: cd /client/dev-client/ </p>
-<p> type in: npm start </p>
+<h3> to start up test fixture (tango environment) </h3>
+<p> <b>Linux based</b> sh setUpFixtures.sh (to shutdown use setDownFixtures.sh) </p>
+<p> <b>DOS based</b> setUpFixtures.bat(to shutdown use setDownFixtures.bat) </p>
+<h3> to build server side </h3>
+<p> <b>Linux based</b> sh buildServer.sh </p>
+<p> <b>DOS based</b> buildServer.bat </p>
+<h3> to build client side </h3>
+<p> <b>Linux based</b> sh buildClient.sh </p>
+<p> <b>DOS based</b> buildClient.bat </p>
+<h3> to run server side </h3>
+<p> <b>Linux based</b> sh runServer.sh -> flask run --host=0.0.0.0 </p>
+<p> <b>DOS based</b> sh runServer.bat -> flask run --host=0.0.0.0 </p>
+<h3> to run client side </h3>
+<p> <b>Linux based</b> sh runClient.sh -> npm start </p>
+<p> <b>DOS based</b> runClient.bat -> npm start </p>
 
 to test client open browser at: <br>
 http://localhost:3000/ <br>

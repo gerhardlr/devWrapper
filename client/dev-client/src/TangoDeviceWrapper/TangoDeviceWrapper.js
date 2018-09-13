@@ -24,9 +24,9 @@ class TangoDeviceWrapper extends Component {
      this.state = {data: {},
      log: []};
      this.handleLog = this.handleLog.bind(this);
-     this.socket = openSocket('http://localhost:5003/test');
+     this.socket = openSocket('http://localhost:5000/test');
      this.handleRestError = this.handleRestError.bind(this);
-     this.deviceDataService = new DeviceDataservice('http://localhost:5003/REST/',this.handleRestError);
+     this.deviceDataService = new DeviceDataservice('http://localhost:5000/REST/',this.handleRestError);
   }
 
   handleRestError(error){
