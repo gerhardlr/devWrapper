@@ -12,8 +12,8 @@
 <p> <b>Linux based</b> sh runServer.sh -> flask run --host=0.0.0.0 </p>
 <p> <b>DOS based</b> runServer.bat -> flask run --host=0.0.0.0 </p>
 <h3> to run client side </h3>
-<p> <b>Linux based</b> sh runClient.sh -> npm start </p>
-<p> <b>DOS based</b> runClient.bat -> npm start </p>
+<p> <b>Linux based</b> sh runClient.sh -> (if fist time: [npm install]) npm start </p>
+<p> <b>DOS based</b> runClient.bat ->(if fist time: [npm install]) npm start </p>
 
 to test client open browser at: <br>
 http://localhost:3000/ <br>
