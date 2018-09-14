@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="36527e3f-8c20-44e9-8811-c9e0525f381b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/runClient.bat" afterPath="$PROJECT_DIR$/runClient.bat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/runServer.bat" afterPath="$PROJECT_DIR$/runServer.bat" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -47,7 +48,7 @@
         <entry file="file://$PROJECT_DIR$/runServer.bat">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="30">
-              <caret line="2" column="32" lean-forward="false" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
+              <caret line="2" column="118" lean-forward="false" selection-start-line="2" selection-start-column="118" selection-end-line="2" selection-end-column="118" />
               <folding />
             </state>
           </provider>
@@ -107,7 +108,7 @@
         <entry file="file://$PROJECT_DIR$/runClient.bat">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="30">
-              <caret line="2" column="121" lean-forward="false" selection-start-line="2" selection-start-column="121" selection-end-line="2" selection-end-column="121" />
+              <caret line="2" column="118" lean-forward="false" selection-start-line="2" selection-start-column="118" selection-end-line="2" selection-end-column="118" />
               <folding />
             </state>
           </provider>
@@ -207,8 +208,8 @@
         <option value="$PROJECT_DIR$/client/Dockerfile" />
         <option value="$PROJECT_DIR$/runServer.sh" />
         <option value="$PROJECT_DIR$/runClient.sh" />
-        <option value="$PROJECT_DIR$/runServer.bat" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/runServer.bat" />
         <option value="$PROJECT_DIR$/runClient.bat" />
       </list>
     </option>
@@ -656,14 +657,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/runServer.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="32" lean-forward="false" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/buildServer.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -720,10 +713,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/runServer.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="118" lean-forward="false" selection-start-line="2" selection-start-column="118" selection-end-line="2" selection-end-column="118" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/runClient.bat">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
-          <caret line="2" column="121" lean-forward="false" selection-start-line="2" selection-start-column="121" selection-end-line="2" selection-end-column="121" />
+          <caret line="2" column="118" lean-forward="false" selection-start-line="2" selection-start-column="118" selection-end-line="2" selection-end-column="118" />
           <folding />
         </state>
       </provider>
