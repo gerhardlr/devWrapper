@@ -30,7 +30,7 @@ class TangoDeviceWrapper extends Component {
   }
 
   handleRestError(error){
-    this.handleLog(new LogItem("error generated on REST command:"+JSON.stringify(error))); 
+    this.handleLog(new LogItem("error generated on REST command:"+JSON.stringify(error)));
   }
 
   componentDidMount() {
@@ -38,16 +38,16 @@ class TangoDeviceWrapper extends Component {
     //.next(result => console.log(result));
     this.socket.on( 'socket connected', () => { this.handleLog( new LogItem('socket connected')) } );
     this.socket.on('device event',() => { this.handleLog( new LogItem('device event received')) } );
-    this.socket.on('device event error',(data) => { 
+    this.socket.on('device event error',(data) => {
       console.log(data);
       return this.handleLog( new LogItem('device event error received'));
     } );
 
-    this.socket.on('connect', () => { this.handleLog( new LogItem('client socket connect on'+this.socket.id))});
+    this.socket.on('connect', () => { this.handleLog( new LogItem('client socket connect on'+this.socket.id))
     this.socket.on('disconnect', (reason) => { this.handleLog( new LogItem('client disconnecion reason: '+reason))});
     //test
-    
   }
+}
 
   componentWillUnmount() {
     this.socket.emit('disconnect_request');
@@ -79,9 +79,9 @@ class TangoDeviceWrapper extends Component {
               <tr><td><GenericCommands handleLog={this.handleLog} deviceDataService={this.deviceDataService} /></td></tr>
               <tr><td><GenericGetAttributes handleLog={this.handleLog} deviceDataService={this.deviceDataService}/></td></tr>
               </table>
-            </td> 
+            </td>
             <td>
-              <ListItems list = {this.state.log} /> 
+              <ListItems list = {this.state.log} />
             </td>
             <td>
               Select Attribute to subscribe to
@@ -91,6 +91,6 @@ class TangoDeviceWrapper extends Component {
           </table>
         </div>
       );
-  }
+    }
  }
  export default CssModules(TangoDeviceWrapper, styles);

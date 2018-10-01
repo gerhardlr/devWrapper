@@ -26,9 +26,8 @@ services:
       - --strict
       - --
       - /usr/local/bin/jive
-      #- tail -f /server/null
+     # - tail -f /server/null
     ports:
-      - 5901:5901
       - 6901:6901
 networks:
   default:
