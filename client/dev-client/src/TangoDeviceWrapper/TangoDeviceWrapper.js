@@ -47,7 +47,7 @@ class TangoDeviceWrapper extends Component {
     this.socket.on('disconnect', (reason) => { this.handleLog( new LogItem('client disconnecion reason: '+reason))});
     //test
   }
-}
+
 
   componentWillUnmount() {
     this.socket.emit('disconnect_request');
