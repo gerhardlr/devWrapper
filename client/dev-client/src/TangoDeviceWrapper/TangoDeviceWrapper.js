@@ -43,7 +43,7 @@ class TangoDeviceWrapper extends Component {
       return this.handleLog( new LogItem('device event error received'));
     } );
 
-    this.socket.on('connect', () => { this.handleLog( new LogItem('client socket connect on'+this.socket.id))
+    this.socket.on('connect', () => { this.handleLog( new LogItem('client socket connect on'+this.socket.id))});
     this.socket.on('disconnect', (reason) => { this.handleLog( new LogItem('client disconnecion reason: '+reason))});
     //test
   }
