@@ -3,9 +3,12 @@ body {
   padding: 8px;
   font-family: sans-serif;
 }
- div.console2 {
+
+/*why this is not defined in the css of console?*/
+/* div.console2 {
  	border-style: solid;
     border-width: thin;
     border-color: gray;
 
 }
+*/

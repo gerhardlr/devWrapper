@@ -1,1 +1,6 @@
-
+#clock-css {
+  margin-left: 3em;
+  margin-right: auto;
+  background-color: blue;
+  font-size: 10em;
+}

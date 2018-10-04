@@ -1,6 +1,15 @@
+/* it looks like the div .console is never used. console.js renders to div.console2.
  div.console {
  	border-style: solid;
     border-width: thin;
     border-color: gray;
-    
+}
+*/
+
+/* I'd put here the css for .console2 and delate it from index.Css .
+Also I'd delete the previous lies int his file*/
+div.console2 {
+ border-style: solid;
+   border-width: thin;
+   border-color: gray;
 }

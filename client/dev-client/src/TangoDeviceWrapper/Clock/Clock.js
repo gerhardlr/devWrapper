@@ -25,11 +25,16 @@ class Clock extends Component {
 
   render() {
       return (
-      <div>
-
-        <h1>{ this.state.date.toLocaleTimeString() }</h1>
-        <div class ="border_line"></div>
+        //<div>
+        //<h1>{ this.state.date.toLocaleTimeString() }</h1> {/*styles to be defined int he css file*/}
+        //<div class ="border_line"></div> {/* this declaration should not be here*/}
+       //</div>
+//modified by vale
+       <div id='clock_css'>
+          { this.state.date.toLocaleTimeString() } 
+          <div class ="border_line"></div> {/* this declaration should not be here*/}
        </div>
+
     );
   }
 }
