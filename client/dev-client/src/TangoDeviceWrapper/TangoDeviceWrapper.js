@@ -64,7 +64,7 @@ class TangoDeviceWrapper extends Component {
       return (
        <div>
           <div styleName="border_line"></div>
-/*          <table styleName="grid1">
+          <table styleName="grid1">
           <tr>
             <td><Clock /></td>
             <td><h1 styleName="main_heading">Tango Device Wrapper for {this.props.name}</h1></td>
@@ -88,7 +88,7 @@ class TangoDeviceWrapper extends Component {
               <Subscriber deviceDataService={this.deviceDataService} socket = {this.socket}/>
             </td>
           </tr>
-          </table> */
+          </table> 
         </div>
       );
     }
